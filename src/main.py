@@ -63,11 +63,10 @@ def generate_page(
     content_html_node = markdown_to_html_node(md)
     content_html = content_html_node.to_html()
 
-    tpl.format(Title=title, Content=content_html)
     filled = tpl.replace("{{ Title }}", title).replace("{{ Content }}", content_html)
 
     if not dev:
-        filled = tpl.replace('href="/', f'href="{base_path}').replace(
+        filled = filled.replace('href="/', f'href="{base_path}').replace(
             'src="/', f'src="{base_path}'
         )
 
