@@ -94,7 +94,7 @@ def generate_content(path: str, base_path="/", dev=True, serving_place="docs"):
         return
     for listing in os.listdir(path):
         full_path = os.path.join(path, listing)
-        generate_content(full_path)
+        generate_content(full_path, base_path=base_path, dev=dev)
     return
 
 
