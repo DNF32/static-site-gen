@@ -80,7 +80,7 @@ def generate_page(
     return None
 
 
-def generate_content(path: str, base_path="/", dev=True, content_place = "docs"):
+def generate_content(path: str, base_path="/", dev=True, content_place="docs"):
     if os.path.isfile(path):
         dst = path.replace("content", f"{content_place}")
         print(path)
@@ -109,4 +109,4 @@ if __name__ == "__main__":
     )
 
     base_path = "/home/dnf/code/static-site/content/"
-    generate_content(base_path, base_path = base_path, dev = False)
+    generate_content(base_path, base_path=base_path, dev=False)
