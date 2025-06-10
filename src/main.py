@@ -80,9 +80,9 @@ def generate_page(
     return None
 
 
-def generate_content(path: str, base_path="/", dev=True, content_place="docs"):
+def generate_content(path: str, base_path="/", dev=True, serving_place="docs"):
     if os.path.isfile(path):
-        dst = path.replace("content", f"{content_place}")
+        dst = path.replace("content", f"{serving_place}")
         print(path)
         generate_page(
             path,
@@ -103,10 +103,12 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         base_path = sys.argv[1]
 
+    print(f"this is the path{base_path}")
+
     copy_tree(
         "/home/dnf/code/static-site/static/",
         "/home/dnf/code/static-site/docs/",
     )
 
-    base_path = "/home/dnf/code/static-site/content/"
-    generate_content(base_path, base_path=base_path, dev=False)
+    content_path = "/home/dnf/code/static-site/content/"
+    generate_content(content_path, base_path=base_path, dev=False)
