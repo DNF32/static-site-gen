@@ -1,4 +1,5 @@
 import os
+import sys
 from os.path import isfile
 import re
 import shutil
@@ -47,7 +48,9 @@ def extract_title(markdown: Markdown) -> str:
     raise Exception("There is no h1 header")
 
 
-def generate_page(from_path: str, template_path: str, dest_path: str):
+def generate_page(
+    from_path: str, template_path: str, dest_path: str, dev=True, base_path="/"
+):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
 
     with open(from_path, encoding="utf-8") as md_fd:
@@ -63,6 +66,11 @@ def generate_page(from_path: str, template_path: str, dest_path: str):
     tpl.format(Title=title, Content=content_html)
     filled = tpl.replace("{{ Title }}", title).replace("{{ Content }}", content_html)
 
+    if not dev:
+        filled = tpl.replace('href="/', f'href="{base_path}').replace(
+            'src="/', f'src="{base_path}'
+        )
+
     if not os.path.exists(dest_path):
         os.makedirs(dest_path)
     path = os.path.join(dest_path, "index.html")
@@ -72,7 +80,7 @@ def generate_page(from_path: str, template_path: str, dest_path: str):
     return None
 
 
-def generate_content(path: str):
+def generate_content(path: str, base_path="/", dev=True):
     if os.path.isfile(path):
         dst = path.replace("content", "public")
         print(path)
@@ -80,6 +88,8 @@ def generate_content(path: str):
             path,
             "/home/dnf/code/static-site/template.html",
             os.path.dirname(dst),
+            base_path=base_path,
+            dev=dev,
         )
         return
     for listing in os.listdir(path):
@@ -89,10 +99,14 @@ def generate_content(path: str):
 
 
 if __name__ == "__main__":
+    base_path = "/"
+    if sys.argv[1]:
+        base_path = sys.argv[1]
+
     copy_tree(
         "/home/dnf/code/static-site/static/",
         "/home/dnf/code/static-site/public/",
     )
 
     base_path = "/home/dnf/code/static-site/content/"
-    generate_content(base_path)
+    generate_content(base_path, base_path = base_path, dev = False)
