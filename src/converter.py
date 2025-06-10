@@ -34,7 +34,7 @@ def clean_ordered_line(line: str) -> str:
 
 
 def clean_unordered_line(line: str) -> str:
-    match = re.match(r"^\* (.*)", line)
+    match = re.match(r"^- (.*)", line)
     if match:
         remaining = match.group(1)
         return remaining
@@ -42,7 +42,7 @@ def clean_unordered_line(line: str) -> str:
         return ""
 
 
-def markdown_to_html_node(markdown: Markdown):
+def markdown_to_html_node(markdown: Markdown) -> ParentNode:
     # Create root <div> container
     root = ParentNode("div")
     root.children = []
@@ -52,7 +52,7 @@ def markdown_to_html_node(markdown: Markdown):
         block_type, info = block_to_block_type(block)
         match block_type:
             case BlockType.Heading:
-                node_block = ParentNode(f"h{info}")
+                node_block = ParentNode(f"h{len(info)}")
                 text_nodes = text_to_textnodes(block.lstrip(info + " "))
                 node_block.children = list(map(text_node_to_html_node, text_nodes))
             case BlockType.Code:
